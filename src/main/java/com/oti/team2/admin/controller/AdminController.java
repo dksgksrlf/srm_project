@@ -1,15 +1,19 @@
 package com.oti.team2.admin.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,10 @@ import com.oti.team2.member.dto.FilterDto;
 //github.com/OTI-SRM/srm_project
 import com.oti.team2.member.dto.Member;
 import com.oti.team2.member.service.IMemberService;
+import com.oti.team2.srdemand.dto.SdApprovalDto;
+import com.oti.team2.srdemand.dto.SrDemand;
+import com.oti.team2.srdemand.dto.SrdemandDetail;
+import com.oti.team2.srdemand.service.ISrDemandService;
 import com.oti.team2.util.Auth;
 import com.oti.team2.util.pager.Pager;
 
@@ -40,6 +48,9 @@ public class AdminController {
 
 	@Autowired
 	private IJobGradeService jobGradeService;
+
+	@Autowired
+	private ISrDemandService srdemandService;
 
 	/**
 	 * 부서목록 조회 메서드
@@ -113,30 +124,32 @@ public class AdminController {
 	 * @return
 	 */
 	@GetMapping("/client/list")
-	public String getMemberList(@RequestParam(value="page",defaultValue = "1") int page,@RequestParam(value="flnm",required=false)String flnm,@RequestParam(value="instNm",required=false)String instNm,Model model) {
-		FilterDto filterDto=new FilterDto();
-		if(instNm!=null) {
+	public String getMemberList(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "flnm", required = false) String flnm,
+			@RequestParam(value = "instNm", required = false) String instNm, Model model) {
+		FilterDto filterDto = new FilterDto();
+		if (instNm != null) {
 			filterDto.setDeptNm(instNm);
-			model.addAttribute("instNm",instNm);
+			model.addAttribute("instNm", instNm);
 		}
-		if(flnm!=null) {
+		if (flnm != null) {
 			filterDto.setFlnm(flnm);
-			model.addAttribute("flnm",flnm);
+			model.addAttribute("flnm", flnm);
 		}
-		int totalRows = memberService.getTotalRows(Auth.ROLE_CLIENT.toString(),filterDto);
+		int totalRows = memberService.getTotalRows(Auth.ROLE_CLIENT.toString(), filterDto);
 		Pager pager = new Pager(totalRows, 1);
-		//log.info(pager);
+		// log.info(pager);
 
 		// 목록 가져오기
-		List<Member> clientList = memberService.getMemberList(Auth.ROLE_CLIENT.toString(), pager,filterDto);
+		List<Member> clientList = memberService.getMemberList(Auth.ROLE_CLIENT.toString(), pager, filterDto);
 		model.addAttribute("clientList", clientList);
 		// log.info(clientList);
 		// 상세 가져오기
 		Member client = memberService.getMember(clientList.get(0).getMemberId(), Auth.ROLE_CLIENT.toString());
 		log.info(client);
 		model.addAttribute("client", client);
-		model.addAttribute("pager",pager);
-		
+		model.addAttribute("pager", pager);
+
 		return "management/clientList";
 	}
 
@@ -159,39 +172,43 @@ public class AdminController {
 	 * 
 	 * @author 안한길
 	 * 
-	 * @param page : 페이지  flnm:이름  deptNm:부서명  jbgdNm:부서명
+	 * @param page : 페이지 flnm:이름 deptNm:부서명 jbgdNm:부서명
 	 * 
 	 * @return 사원 목록 페이지 url
 	 */
 	@RequestMapping(value = "/employee/list", method = RequestMethod.GET)
-	public String getEmployeeList(@RequestParam(value="page",defaultValue = "1") int page,@RequestParam(value="flnm",required=false)String flnm,@RequestParam(value="deptNm",required=false)String deptNm,@RequestParam(value="jbgdNm",required=false)String jbgdNm , Model model) {
-		log.info("getEmployeeList"+page+flnm);
+	public String getEmployeeList(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "flnm", required = false) String flnm,
+			@RequestParam(value = "deptNm", required = false) String deptNm,
+			@RequestParam(value = "jbgdNm", required = false) String jbgdNm, Model model) {
+		log.info("getEmployeeList" + page + flnm);
 		FilterDto filterDto = new FilterDto();
-		if(deptNm!=null) {
+		if (deptNm != null) {
 			filterDto.setDeptNm(deptNm);
-			model.addAttribute("deptNm",deptNm);
+			model.addAttribute("deptNm", deptNm);
 		}
-		if(flnm!=null) {
+		if (flnm != null) {
 			filterDto.setFlnm(flnm);
-			model.addAttribute("flnm",flnm);
+			model.addAttribute("flnm", flnm);
 		}
-		if(jbgdNm!=null) {
+		if (jbgdNm != null) {
 			filterDto.setJbgdNm(jbgdNm);
-			model.addAttribute("jbgdNm",jbgdNm);
+			model.addAttribute("jbgdNm", jbgdNm);
 		}
-		int totalRows = memberService.getTotalRows(Auth.ROLE_DEVELOPER.toString(),filterDto);
+		int totalRows = memberService.getTotalRows(Auth.ROLE_DEVELOPER.toString(), filterDto);
 		Pager pager = new Pager(totalRows, page);
-		
-		List<Member> employeesList = memberService.getMemberList(Auth.ROLE_DEVELOPER.toString(), pager,filterDto);
-		
+
+		List<Member> employeesList = memberService.getMemberList(Auth.ROLE_DEVELOPER.toString(), pager, filterDto);
+
 		// 사원 목록 첫번째 사원 정보 사원정보 카드에 추가
-		employeesList.set(0, memberService.getMember(employeesList.get(0).getMemberId(), Auth.ROLE_DEVELOPER.toString()));
+		employeesList.set(0,
+				memberService.getMember(employeesList.get(0).getMemberId(), Auth.ROLE_DEVELOPER.toString()));
 		// 사원 정보 카드 에서 직급, 부서 선택 목록
 		model.addAttribute("jobGradeList", jobGradeService.getJobGradeList());
 		model.addAttribute("departmentList", departmentService.getDepartmentNameList());
 
 		model.addAttribute("employeesList", employeesList);
-		model.addAttribute("pager",pager);
+		model.addAttribute("pager", pager);
 		return "management/employeesList";
 	}
 
@@ -242,4 +259,58 @@ public class AdminController {
 		log.info(member);
 		return memberService.modifyMember(member);
 	}
+
+	/**
+	 * 관리자의 모든 요청 목록 조회 기능 **
+	 * 
+	 * @author 신정은
+	 */
+	@GetMapping("/srdemand/list")
+	public String getSrDemandList(Model model, @RequestParam(required = false, name = "dmndno") String dmndno,
+			@RequestParam(required = true, name = "page", defaultValue = "1") String page) {
+
+		// 목록
+		int totalRows = srdemandService.getCountAllSr();
+		Pager pager = new Pager(totalRows, Integer.parseInt(page));
+		log.info(pager);
+
+		List<SrDemand> list = srdemandService.getSrDemandListBy(pager);
+		model.addAttribute("srDemandList", list);
+
+		// 기본 첫번째 상세 or 선택된 상세
+		SrdemandDetail sd = null;
+		if (dmndno != null) {
+			sd = srdemandService.getSrDemandDetail(dmndno);
+		} else {
+			sd = srdemandService.getSrDemandDetail(list.get(0).getDmndNo());
+		}
+
+		model.addAttribute("sd", sd);
+		model.addAttribute("pager", pager);
+
+		return "srDemand/adminSrDemandList";
+	}
+
+	/**
+	 * 관리자의 sr요청 결재 기능 **
+	 * 
+	 * @author 신정은
+	 */
+	@ResponseBody
+	@PostMapping("/srdemand/approval")
+	public Map<String, String> getSrDemandApproval(Authentication auth, @RequestBody SdApprovalDto sdApprovalDto) {
+		sdApprovalDto.setRvwrId(auth.getName());
+		log.info(sdApprovalDto);
+		srdemandService.getSrDemandApproval(sdApprovalDto);
+
+		Map<String, String> map = new HashMap<>();
+		String result = "";
+		if (sdApprovalDto.getVal() == 1) {
+			result = sdApprovalDto.getDmndNo() + "번 요청이 승인처리 되었습니다.";
+		} else
+			result = sdApprovalDto.getDmndNo() + "번 요청이 반려처리 되었습니다.";
+		map.put("result", result);
+		return map;
+	}
+
 }

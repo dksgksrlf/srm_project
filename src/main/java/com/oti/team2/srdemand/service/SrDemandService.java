@@ -5,13 +5,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.oti.team2.srdemand.dao.ISrDemandDao;
+import com.oti.team2.srdemand.dto.SdApprovalDto;
 import com.oti.team2.srdemand.dto.SrDemand;
 import com.oti.team2.srdemand.dto.SrRequestDto;
 import com.oti.team2.srdemand.dto.SrdemandDetail;
+import com.oti.team2.srinformation.service.SrinformationService;
+import com.oti.team2.util.pager.Pager;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -21,6 +26,9 @@ public class SrDemandService implements ISrDemandService{
 	
 	@Autowired
 	private ISrDemandDao srDemandDao;
+	
+	@Autowired
+	private SrinformationService srinformationService;
 	
 	/**
 	 * sr요청 등록
@@ -33,7 +41,7 @@ public class SrDemandService implements ISrDemandService{
 		srRequestDto.setDmndNo(dmndNo);
 		int row = srDemandDao.insertSrDemand(srRequestDto);
 		log.info(row);
-		return 0;
+		return row;
 	}
 	
 	/**
@@ -52,7 +60,6 @@ public class SrDemandService implements ISrDemandService{
 		String formatedNow = formatter.format(now);
 		String srCode = "SR" + formatedNow;
 		
-		// 포맷팅 현재 날짜/시간 출력
 		int count = srDemandDao.countByDmndNo(srCode+"%");
 		
 		// ex) SR230222_0008 에서 _ 뒤의 숫자 4자리를 세팅하는 로직
@@ -61,7 +68,7 @@ public class SrDemandService implements ISrDemandService{
 			number = "0"+number;
 		}
 		
-		srCode = srCode + "_" + number;
+		srCode = srCode + "-" + number;
 		log.info("sr요청코드 : " + formatedNow); 
 		log.info("오늘의 요청 수 : " + count);	
 		log.info("최종 sr요청코드 : " + srCode);
@@ -72,8 +79,8 @@ public class SrDemandService implements ISrDemandService{
 	 * 고객의 나의 sr요청 목록 조회
 	 * @author 신정은
 	 */
-	public List<SrDemand> getSrDemandList(String custId) {
-		return srDemandDao.selectByCustId(custId);
+	public List<SrDemand> getSrDemandList(String custId, Pager pager) {
+		return srDemandDao.selectByCustId(custId, pager);
 	}
 	
 	/** 
@@ -90,7 +97,8 @@ public class SrDemandService implements ISrDemandService{
 	 * @author 신정은
 	 */
 	public int updateSrDemand(SrRequestDto srRequestDto) {
-		// TODO Auto-generated method stub
+		int row = 0;
+		srDemandDao.updateByDmndNo(srRequestDto);
 		return 0;
 	}
 	
@@ -101,8 +109,78 @@ public class SrDemandService implements ISrDemandService{
 	 * @return sr요청 상세 조회
 	 */
 	public SrdemandDetail getSrDemandDetail(String dmndNo) {
-		return srDemandDao.selectDetailByDmndNo(dmndNo);
+		SrdemandDetail sd = srDemandDao.selectDetailByDmndNo(dmndNo);
+		log.info(dmndNo);
+		return sd;
 	}
 
+	/**
+	 * SR요청 삭제하기
+	 * 
+	 * @author 신정은
+	 */
+	public void deleteSrdemand(String dmndNo) {
+		srDemandDao.updateDelYnByDmndNo(dmndNo);	
+	}
+	
+	/**
+	 * 고객용
+	 * 나의 요청 총 행의 수 구하기
+	 * @author 신정은
+	 */
+	public int getCountClientSr(String clientId) {
+		return srDemandDao.countByClientId(clientId);
+	}
+
+	/**
+	 * 관리자용
+	 * 모든요청 총 행의 수 구하기
+	 * @author 신정은
+	 */
+	public int getCountAllSr() {
+		return srDemandDao.countAllSrDemand();
+	}
+
+	/**
+	 * 관리자용
+	 * 모든요청 목록 가져오기
+	 * @author 신정은
+	 */
+	public List<SrDemand> getSrDemandListBy(Pager pager) {
+		return srDemandDao.selectAllSrDemand(pager);
+	}
+
+	/**
+	 * 관리자의 sr요청  결재 기능  승인 / 반려 모두 진행
+	 * @author 신정은
+	 */
+	@Transactional
+	public void getSrDemandApproval(SdApprovalDto sdApprovalDto) {
+		if(sdApprovalDto.getVal() == 1) {
+			srinformationService.insertInformation(sdApprovalDto);
+		}			
+		srDemandDao.updateSttsCdAndRjctRsnByDmndNo(sdApprovalDto);
+		log.info(sdApprovalDto);
+		
+	}
+
+	/**
+	 * SR요청 번호로 시스템cd 가져오기
+	 * 
+	 * @author 신정은
+	 */
+	public String getSysCdByDmndNo(String dmndNo) {
+		return srDemandDao.selectSysCdByDmndNo(dmndNo);
+	}
+	
+	/**
+	 * 
+	 * @author 여수한
+	 * 작성일자 : 2023-02-28
+	 * @return sr요청 진행사항 수정 : 진척률 수정 / 결제취소 처리 시에 사용 됨
+	 */
+	public void updateSrDemandStts(String srNo, int sttsCd) {
+		srDemandDao.updateSttsBySrNo(srNo, sttsCd);
+	}
 
 }

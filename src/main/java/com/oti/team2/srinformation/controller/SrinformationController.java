@@ -16,7 +16,7 @@ import com.oti.team2.srinformation.dto.Dept;
 import com.oti.team2.srinformation.dto.Manager;
 import com.oti.team2.srinformation.dto.SrTotal;
 import com.oti.team2.srinformation.dto.SrinformationList;
-import com.oti.team2.srinformation.dto.SrplanInfomation;
+import com.oti.team2.srinformation.dto.SrplanInformation;
 import com.oti.team2.srinformation.service.ISrinformationService;
 
 import lombok.extern.log4j.Log4j2;
@@ -40,9 +40,12 @@ public class SrinformationController {
 	@RequestMapping(value="/srinformation/list", method=RequestMethod.GET)
 	public String getList(Model model) {
 		List<SrinformationList> srlist = srinformationService.getList();
+		SrdemandDetail sd = srDemandService.getSrDemandDetail(srlist.get(0).getDmndNo());
 		List<Dept> deptList = srinformationService.getDeptList();
+		log.info("sd 상세 : " + sd);
 		log.info("진척목록: " + srlist);
 		log.info("개발부서 목록: " + deptList);
+		model.addAttribute("sd", sd);
 		model.addAttribute("srlist", srlist);
 		model.addAttribute("deptList", deptList);
 		return "srInfo/srInformationList";
@@ -58,7 +61,7 @@ public class SrinformationController {
 	@RequestMapping(value="/srinformation/detail/{dmndNo}", method=RequestMethod.GET)
 	public SrTotal getDetail(@PathVariable("dmndNo")String dmndNo) {
 		SrdemandDetail dd = srDemandService.getSrDemandDetail(dmndNo);
-		SrplanInfomation pi = srinformationService.getPlan(dmndNo);
+		SrplanInformation pi = srinformationService.getPlan(dmndNo);
 		SrTotal total = new SrTotal(dd,pi);
 		return total;
 	}
@@ -71,12 +74,12 @@ public class SrinformationController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/srinformation/plan/{dmndNo}", method=RequestMethod.GET)
-	public SrplanInfomation getPlanInfo(@PathVariable("dmndNo")String dmndNo) {
-		SrplanInfomation pi = srinformationService.getPlan(dmndNo);
+	public SrplanInformation getPlanInfo(@PathVariable("dmndNo")String dmndNo) {
+		SrplanInformation pi = srinformationService.getPlan(dmndNo);
 		log.info("pi : " + pi);
 		return pi;
 	}
-	
+
 	/**
 	 * 
 	 * @author 여수한
@@ -84,7 +87,7 @@ public class SrinformationController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/srinformation/plan/update", method=RequestMethod.POST)
-	public void updateSrInfo(SrplanInfomation srplanInfomation) {
+	public void updateSrInfo(SrplanInformation srplanInfomation) {
 		log.info("업데이트될 계획 정보 : " + srplanInfomation);
 		srinformationService.updateSrInfo(srplanInfomation);
 	}

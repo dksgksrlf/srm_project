@@ -12,6 +12,7 @@ public interface IProgressService {
 	 * @return sr요청 진척률 조회
 	 */
 	List<Progress> getProgress(String srNo);
+	
 	/**
 	 * 
 	 * @author 여수한

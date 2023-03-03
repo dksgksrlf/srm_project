@@ -228,6 +228,12 @@
       WHERE
          DEPT_CD = #{deptCd}
    </select>
+   
+   <select id="selectFlnmByMemberId" parameterType="string" resultType="string">
+	   	SELECT FLNM 
+	   	FROM MEMBERS
+	   	WHERE MEMBER_ID=#{memberId}
+   </select>
    <!-- Member 객체 안의 내부 객체와의 매핑을 위함 -->
    <resultMap type="member" id="memberResultMap">
       <id property="memberId" column="MEMBER_ID"/>

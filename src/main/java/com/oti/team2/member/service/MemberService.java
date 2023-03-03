@@ -100,4 +100,12 @@ public class MemberService implements IMemberService {
 	public List<Developer> getEmployeeNameList(String deptCd) {
 		return memberDao.selectByDeptCd(deptCd);
 	}
+
+	/**
+	 * memberId로 사용자 이름 가져오기
+	 * @author 신정은
+	 */
+	public String getFlnm(String memberId) {
+		return memberDao.selectFlnmByMemberId(memberId);
+	}
 }

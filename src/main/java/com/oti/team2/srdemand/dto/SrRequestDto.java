@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class SrRequestDto {
 	private String dmndNo;
-	private String dmndYmd; // 등록일
 	private String custId; // 고객 아이디
 	private String sysCd;
 	private String taskSeCd;

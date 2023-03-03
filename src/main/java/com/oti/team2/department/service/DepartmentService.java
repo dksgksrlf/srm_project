@@ -71,4 +71,12 @@ public class DepartmentService implements IDepartmentService {
 		return departmentDao.selectDepartmentNameList();
 	}
 
+	/**
+	 *  부서cd로 담당자 id 가져오기
+	 *  @author 신정은
+	 */
+	public String getMngrNameByDeptCd(String deptCd) {
+		return departmentDao.selectMngrNameByDeptCd(deptCd);
+	}
+
 }

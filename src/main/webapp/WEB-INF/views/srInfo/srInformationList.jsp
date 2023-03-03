@@ -1,6 +1,6 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%-- 작성자 : 여수한 / 작성 날짜 : 2023-02-17 --%>
 
 <html>
@@ -323,16 +323,18 @@ th {
 															<div class="col-6">
 																<h5>SR요청 상세정보</h5>
 															</div>
-															<div class="col-3">
-																<button type="button" class="btn btn-primary btn-sm"
-																	data-toggle="modal" data-target="#addHistoryModal">
-																	예정일 변경</button>
-															</div>
-															<div class="col-3">
-																<button type="button" class="btn btn-primary btn-sm"
-																	data-toggle="modal" data-target="#addHistoryModal">
-																	개발 취소</button>
-															</div>
+															<c:if test="${stts ne '개발완료' || stts ne '개발취소'}">
+																<div class="col-3">
+																	<button type="button" class="btn btn-primary btn-sm"
+																		data-toggle="modal" data-target="#addHistoryModal">
+																		예정일 변경</button>
+																</div>
+																<div class="col-3">
+																	<button type="button" class="btn btn-primary btn-sm"
+																		data-toggle="modal" data-target="#addHistoryModal">
+																		개발 취소</button>
+																</div>
+															</c:if>
 														</div>
 													</div>
 													<div class="card-block" style="height: 600px;">
@@ -343,9 +345,11 @@ th {
 																<div class="col col-sm-3">요청 번호</div>
 																<div class="col col-sm-9">
 																	<input type="hidden" id="SRDSrNo"> <input
-																		readonly class="form-control" style="width: 150px;"
-																		id="SRDDmndNo">
+																		readonly class="form-control"
+																		id="SRDDmndNo" value="${sd.dmndNo}">
 																</div>
+																<div class="col col-sm-3">우선순위</div>
+																<div class="col col-sm-3" id="SiRnk">${sd.rnk}</div>
 
 															</div>
 															<hr />
@@ -353,7 +357,7 @@ th {
 																<div class="col col-sm-3">SR 제목</div>
 																<div class="col col-sm-9">
 																	<input readonly class="form-control"
-																		style="width: 150px;" id="SRDTitle">
+																		style="width: 150px;" id="SRDTitle" value="${sd.ttl}">
 																</div>
 															</div>
 															<hr />
@@ -361,7 +365,7 @@ th {
 																<div class="col col-sm-3">관련 근거</div>
 																<div class="col col-sm-9">
 																	<input readonly class="form-control"
-																		style="width: 150px;" id="SRDRelgrund">
+																		style="width: 150px;" id="SRDRelgrund" value="${sd.relGrund}">
 																</div>
 															</div>
 															<hr />
@@ -370,14 +374,14 @@ th {
 																	<div class="col col-sm-4">시스템구분</div>
 																	<div class="col col-sm-6">
 																		<input readonly class="form-control"
-																			style="width: 200%;" id="SRDSys">
+																			style="width: 200%;" id="SRDSys" value="${sd.sysNm}">
 																	</div>
 																</div>
 																<div class="col-sm-6">
 																	<div class="col col-sm-4">업무구분</div>
 																	<div class="col col-sm-6">
 																		<input readonly class="form-control"
-																			style="width: 150%;" id="SRDTask">
+																			style="width: 150%;" id="SRDTask" value="${sd.taskSeNm}">
 																	</div>
 																</div>
 															</div>
@@ -387,14 +391,14 @@ th {
 																	<div class="col col-sm-4">요청기관</div>
 																	<div class="col col-sm-6">
 																		<input readonly class="form-control"
-																			style="width: 200%;" id="SRDInst">
+																			style="width: 200%;" id="SRDInst" value="${sd.instNm}">
 																	</div>
 																</div>
 																<div class="col-sm-6">
 																	<div class="col col-sm-4">요청자</div>
 																	<div class="col col-sm-6">
 																		<input readonly class="form-control"
-																			style="width: 150%;" id="SRDFlnm">
+																			style="width: 150%;" id="SRDFlnm" value="${sd.clientNm}">
 																	</div>
 																</div>
 															</div>
@@ -403,14 +407,14 @@ th {
 																<div class="col-sm-6">
 																	<div class="col col-sm-4">요청일</div>
 																	<div class="col col-sm-8">
-																		<input readonly class="form-control" id="SRDDmndymd">
+																		<input readonly class="form-control" id="SRDDmndymd" value="${sd.dmndYmd}">
 																	</div>
 																</div>
 																<div class="col-sm-6">
 																	<div class="col col-sm-4">완료요청일</div>
 																	<div class="col col-sm-8">
 																		<input readonly class="form-control"
-																			id="SRDCmptnDmndYmd">
+																			id="SRDCmptnDmndYmd" value="${sd.cmptnDmndYmd}">
 																	</div>
 																</div>
 															</div>
@@ -421,10 +425,25 @@ th {
 																	내용</label>
 																<div class="col-sm-9">
 																	<input readonly class="form-control"
-																		style="width: 300px; height: 110px;" id="SRDCn">
+																		style="width: 300px; height: 110px;" id="SRDCn" value="${sd.cn}">
 																</div>
 															</div>
 															<hr />
+															<div class="form-group row">
+																<div class="col-sm-6">
+																	<div class="col col-sm-4">검토자</div>
+																	<div class="col col-sm-8">
+																		<input readonly class="form-control" id="SRDDmndymd" value="${sd.rvwrNm}">
+																	</div>
+																</div>
+																<div class="col-sm-6">
+																	<div class="col col-sm-4">진행상태</div>
+																	<div class="col col-sm-8">
+																		<input readonly class="form-control"
+																			id="SRDCmptnDmndYmd" value="${sd.sttsNm}">
+																	</div>
+																</div>
+															</div>
 															<div class="form-group row">
 																<label class="col-sm-3 col-form-label"
 																	style="font-size: 12px;">첨부파일</label>
@@ -471,11 +490,13 @@ th {
 																	<div class="col-sm-6">
 																		<div class="col col-sm-4">처리팀</div>
 																		<div class="col col-sm-6">
+																		<!-- 진행상태에 따라서 inpu readonly로 출력 -->
 																			<select id="dept" onchange="changeDept()">
 																				<c:forEach var="deptList" items="${deptList}">
 																					<option id="SRDept" value="${deptList.deptCd}">${deptList.deptNm}</option>
 																				</c:forEach>
 																			</select>
+																		<!--                                -->
 																		</div>
 
 																	</div>
@@ -491,12 +512,14 @@ th {
 																	<div class="col-sm-6">
 																		<div class="col col-sm-4">계획시작일</div>
 																		<div class="col col-sm-6">
+																			<!-- 진행상태에 따라서 inpu readonly로 출력 -->
 																			<input type="text" class="form-control" id="SRPlBgngYmd">
 																		</div>
 																	</div>
 																	<div class="col-sm-6">
 																		<div class="col col-sm-4">계획종료일</div>
 																		<div class="col col-sm-6">
+																			<!-- 진행상태에 따라서 inpu readonly로 출력 -->
 																			<input type="text" class="form-control"
 																				id="SRPlEndYmd">
 																		</div>
@@ -506,10 +529,12 @@ th {
 																	<div class="col col-sm-2" style="line-height: 90px;">검토
 																		내용</div>
 																	<div class="col col-sm-9">
+																		<!-- 진행상태에 따라서 inpu readonly로 출력 -->
 																		<textarea rows="5" cols="5" class="form-control"
 																			id="SRPlRvwCn"></textarea>
 																	</div>
 																</div>
+																<!-- 진행상태에 따라서 안보여야됨 -->
 																<button class="btn btn-info" onclick="planUpdate()"
 																	style="float: right; padding-bottom: 10px; margin-bottom: 10px;">수정</button>
 															</div>
@@ -538,6 +563,7 @@ th {
 																		</table>
 																	</div>
 																</div>
+																<!-- 진행상태에 따라서 안보여야됨 -->
 																<button class="btn btn-info"
 																	style="float: right; padding-bottom: 10px; margin-bottom: 10px;">저장</button>
 																<button onclick="deleteResource()" class="btn btn-info"
@@ -548,6 +574,7 @@ th {
 																	data-toggle="modal" data-target="#addSrResourcesModal">추가</button>
 															</div>
 															<%-- *********************************** [ 진척률 ] ***********************************--%>
+															<!-- 진행상태에 따라서 inpu readonly로 출력 및 버튼 안보여야됨 -->
 															<div class="tab-pane" id="messages1" role="tabpanel"
 																style="padding-bottom: 20px;">
 																<div class="tab-pane" id="profile1" role="tabpanel">

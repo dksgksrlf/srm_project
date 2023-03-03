@@ -28,21 +28,4 @@
 			
 	
 	</update>
-	<!-- sr요청 진행사항 수정 -->
-	<update id="updateSttsByPrgrsId" parameterType="map">
-		UPDATE
-			SR_DEMAND
-		SET
-			STTS_CD = #{sttsCd}
-		WHERE
-			DMND_NO = (
-						SELECT 
-							DMND_NO
-						FROM 
-							SR_INFORMATION
-						WHERE
-							SR_NO=#{srNo} 
-						)
-			
-	</update>
 </mapper>

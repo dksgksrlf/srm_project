@@ -75,4 +75,10 @@ public interface IMemberService {
 	 * @return 개발자 목록
 	 * */
 	public List<Developer> getEmployeeNameList(String deptCd);
+	
+	/**
+	 * memberId로 사용자 이름 가져오기
+	 * @author 신정은
+	 */
+	public String getFlnm(String memberId);
 }

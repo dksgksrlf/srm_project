@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.oti.team2.progress.dao.IProgressDao;
 import com.oti.team2.progress.dto.Progress;
+import com.oti.team2.srdemand.service.ISrDemandService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -16,6 +17,9 @@ public class ProgressService implements IProgressService {
 
 	@Autowired
 	IProgressDao progressDao;
+	
+	@Autowired
+	ISrDemandService srDemandService;
 
 	/**
 	 * 
@@ -40,21 +44,21 @@ public class ProgressService implements IProgressService {
 		} else if (prgrsRt == 10) {
 			int sttsCd = 3;
 			// 진척률 + 진행상태
-			progressDao.updateSttsByPrgrsId(srNo, sttsCd);
+			srDemandService.updateSrDemandStts(srNo, sttsCd);
 		} else if (prgrsRt >= 11 && prgrsRt < 40) {
 			// 진척률만 업데이트
 			progressDao.updateProgressByPrgrsId(prgrsId, bgngYmd, endYmd , prgrsRt);
 		} else if (prgrsRt == 40) {
 			int sttsCd = 3;
 			// 진척률 + 진행상태
-			progressDao.updateSttsByPrgrsId(srNo, sttsCd);
+			srDemandService.updateSrDemandStts(srNo, sttsCd);
 		} else if (prgrsRt >= 41 && prgrsRt < 70) {
 			// 진척률만 업데이트
 			progressDao.updateProgressByPrgrsId(prgrsId, bgngYmd, endYmd, prgrsRt);
 		} else if (prgrsRt == 70) {
 			int sttsCd = 4;
 			// 진척률 + 진행상태
-			progressDao.updateSttsByPrgrsId(srNo, sttsCd);
+			srDemandService.updateSrDemandStts(srNo, sttsCd);
 		} else if (prgrsRt >= 71 && prgrsRt < 80) {
 			// 진척률만 업데이트
 			progressDao.updateProgressByPrgrsId(prgrsId, bgngYmd, endYmd, prgrsRt);
@@ -71,7 +75,7 @@ public class ProgressService implements IProgressService {
 		} else if (prgrsRt == 100) {
 			int sttsCd = 5;
 			// 진척률 + 진행상태
-			progressDao.updateSttsByPrgrsId(srNo, sttsCd);
+			srDemandService.updateSrDemandStts(srNo, sttsCd);
 		}
 	}
 }

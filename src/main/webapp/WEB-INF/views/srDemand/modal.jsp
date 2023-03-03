@@ -1,67 +1,19 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 
 <%-- 작성자 : 여수한 / 작성 날짜 : 2023-02-17 --%>
-
+<%-- 상세, 등록, 수정 --%>
+<script src="/resources/js/srDemand.js"></script>
 <script>
 	$(document).on('click', '#addbtn', function(e) {
 		console.log("userSrDemandList  요청 등록")
-		<%-- 작성자 : 신정은
-			내용 : sr 요청 작성시, 작성자의 기본 정보 세팅 --%>
-		$.ajax({
-			url : '/srdemand/add',
-			type : 'GET',
-			success : function(res) {
-				$("#writerName").text(res.memberName);
-				$("#instName").text(res.instName);	
-				$("#custId").val(res.memberId);
-				console.log(res.memberId);
-			}
-		});
-		
-		<%-- 작성자 : 신정은
-		내용 : sr 요청 작성시, 모든 시스템 데이터 드롭다운에 표시하기 위함--%>
-		$.ajax({
-			url : '/srsystem/list',
-			type : 'GET',
-			success : function(res) {
-				console.log(res);
-				for(var idx = 0; idx < res.length; idx++) {
-					var option = $("<option value="+  res[idx].sysCd + ">"+ res[idx].sysNm + "</option>")
-					$('#srSystems').append(option);
-				}
-			}
-		});	
-		
-		
+<%--  작성자의 기본 정보 세팅 --%>
+	writerBase();
+<%-- sr 요청 작성시, 모든 시스템 데이터 드롭다운에 표시하기 위함--%>
+	setSystems();
 		$('#addmodal').addClass('show');
 		document.body.style = `overflow: hidden`;
 	});
-	
-	<%-- 작성자 : 신정은
-	내용 : sr 요청 작성시 시스템 선택시 해당되는 업무구분 데이터 목록 가져오기 위함--%>
-	 function changeSystem(){
-		var selectedElement = document.getElementById("srSystems");
-	    
-	    // 선택한 option의 value, 텍스트
-	    var sysCd = selectedElement.options[selectedElement.selectedIndex].value;
-	    var sysNm = selectedElement.options[selectedElement.selectedIndex].text;	    
-	    console.log("선택된 시스템 :" + sysCd)
-	    
-	    $.ajax({
-			url : '/task/list/' + sysCd,
-			type : 'GET',
-			success : function(res) {
-				console.log(res);
-				var mid = $("#custId").val();
-				console.log(">>> " + mid);
-				for(var idx = 0; idx < res.length; idx++) {
-					var option = $("<option value="+  res[idx].taskSeCd + ">"+ res[idx].taskSeNm + "</option>")
-					$('#sysTask').append(option);
-				}
-			}
-		});	
-	} 
-	
+
 	/* 요청 모달 닫기 */
 	$(document).on('click', '#closebtn', function(e) {
 		console.log("click event");
@@ -69,12 +21,6 @@
 		document.body.style = `overflow: scroll`;
 	});
 
-	/* 요청 수정 */
-	$(document).on('click', '#modbtn', function(e) {
-		console.log("click event");
-		$('#modmodal').addClass('show');
-		document.body.style = `overflow: hidden`;
-	});
 	$(document).on('click', '#closebtn', function(e) {
 		console.log("click event");
 		$('#modmodal').removeClass('show');
@@ -140,35 +86,27 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="col col-sm-4">소속</div>
-							<div class="col col-sm-6" id="instName">
-							</div>
+							<div class="col col-sm-6" id="instName"></div>
 						</div>
 					</div>
 					<div class="form-group row">
 						<div class="col-sm-6">
-							<div class="col col-sm-4">등록일</div>
-							<div class="col col-sm-6">
-								<input type="date" name="dmndYmd" id="addDatepicker">
-							</div>
-	
-						</div>
-	
-						<div class="col-sm-6">
-							<div class="col col-sm-4">관련 시스템</div>
+							<div class="col col-sm-4">시스템구분</div>
 							<div class="col col-sm-6">
 								<div class="dropdown dropdown open">
-									<select name="sysCd" id="srSystems" onchange="changeSystem()">
+									<select name="sysCd" class="srSystems"
+										onchange="changeSystem(this.value)">
 									</select>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="form-group row d-flex justify-content-end mr-6">
-						<div class="col col-sm-4">업무구분</div>
-						<div class="col col-sm-6">
-							<div class="dropdown dropdown open">
-								<select name="taskSeCd" id="sysTask">
-								</select>
+						<div class="col-sm-6">
+							<div class="col col-sm-4">업무구분</div>
+							<div class="col col-sm-6">
+								<div class="dropdown dropdown open">
+									<select name="taskSeCd" class="sysTask">
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -202,7 +140,8 @@
 						<div class="col-sm-6">
 							<div class="col col-sm-4">완료 요청일</div>
 							<div class="col col-sm-6">
-								<input type="date" id="addEndRequestDatepicker" name="cmptnDmndYmd">
+								<input type="date" id="addEndRequestDatepicker"
+									name="cmptnDmndYmd">
 							</div>
 						</div>
 					</div>
@@ -214,91 +153,6 @@
 			</div>
 		</div>
 
-	</div>
-	<!-- *********************************** [ SR 요청 수정 ] *********************************** -->
-	<div class="modal" id="modmodal">
-		<div class="modal_body">
-			<div class="m_head">
-				<div class="modal_title" style="color: white;">SR 요청 수정</div>
-			</div>
-			<div class="m_body">
-				<div class="form-group row">
-					<div class="col-sm-6">
-						<div class="col col-sm-4">등록자</div>
-						<div class="col col-sm-6">
-							<input type="text" class="form-control">
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="col col-sm-4">소속</div>
-						<div class="col col-sm-6">
-							<input type="text" class="form-control">
-						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-6">
-						<div class="col col-sm-4">등록일</div>
-						<div class="col col-sm-6">
-							<input type="date" id="modDatepicker">
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="col col-sm-4">관련 시스템</div>
-						<div class="col col-sm-6">
-							<div class="dropdown dropdown open">
-								<form action="#">
-									<select name="languages" id="lang">
-										<option value="워크넷">시스템1</option>
-										<option value="굴국밥">시스템2</option>
-										<option value="고소미">시스템3</option>
-									</select>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				<hr />
-				<div class="form-group row">
-					<div class="col col-sm-2">SR 제목</div>
-					<div class="col col-sm-9">
-						<input type="text" class="form-control">
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col col-sm-2">관련 근거</div>
-					<div class="col col-sm-9">
-						<input type="text" class="form-control">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label" style="line-height: 120px">SR
-						내용</label>
-					<div class="col-sm-9">
-						<textarea rows="5" cols="5" class="form-control"></textarea>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">첨부파일</label>
-					<div class="col-sm-9">
-						<input type="file" class="">
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-6">
-						<div class="col col-sm-4">완료 요청일</div>
-						<div class="col col-sm-6">
-							<input type="date" id="modEndRequestDatepicker">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="m_footer">
-				<div class="modal_btn save center" id="savebtn">삭제</div>
-				<div class="modal_btn save center" id="savebtn">저장</div>
-				<div class="modal_btn danger cancle" id="closebtn">닫기</div>
-			</div>
-		</div>
 	</div>
 	<!-- *********************************** [ SR 개발 등록 ] *********************************** -->
 	<div class="modal" id="devmodal">

@@ -43,4 +43,10 @@ public interface IDepartmentDao {
 	 * @return 부서 이름 목록
 	 * */
 	public List<Department> selectDepartmentNameList();
+	
+	/**
+	 *  부서cd로 담당자 아이디 가져오기
+	 *  @author 신정은
+	 */
+	public String selectMngrNameByDeptCd(@Param("deptCd") String deptCd);
 }

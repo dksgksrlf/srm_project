@@ -7,49 +7,51 @@
 <%@include file="/WEB-INF/views/fragments/header.jsp"%>
 </head>
 <script>
+	
 <%-- JSON으로 받아온 HistoryList를 보여주기 위한 ajax --%>
-function getHistoryList() {
-	var srNo = $("#srNo").val();
-	console.log("srHistoryList 글번호: " + srNo);
-	$
-			.ajax({
-				url : "/history/list?srNo=" + srNo,
-				type : "GET",
+	function getHistoryList() {
+		var srNo = $("#srNo").val();
+		console.log("srHistoryList 글번호: " + srNo);
+		$
+				.ajax({
+					url : "/history/list?srNo=" + srNo,
+					type : "GET",
 
-				success : function(result) {
-					console.log(result);
-					console.log(result.srInformationHistory[0].hstryTtl);
+					success : function(result) {
+						console.log(result);
+						console.log(result.srInformationHistory[0].hstryTtl);
 
-					for (var i = 0; i < result.srInformationHistory.length; i++) {
-						var historyId =  result.srInformationHistory[i].hstryId;
-						var historyCount = [ i + 1 ];
-						var historyTtl = result.srInformationHistory[i].hstryTtl;
-						if(result.srInformationHistory[i].chgEndYmd === null){
-							var historyChgEndYmd = "-";
-						} else {
-							var historyChgEndYmd = result.srInformationHistory[i].chgEndYmd;
-						}							
-						if (result.srInformationHistory[i].hstryStts == 'I') {
-							var historyStts = "요청 중";
-						} else if (result.srInformationHistory[i].hstryStts == 'N') {
-							var historyStts = "반려";
-						} else {
-							var historyStts = "승인";
+						for (var i = 0; i < result.srInformationHistory.length; i++) {
+							var historyId = result.srInformationHistory[i].hstryId;
+							var historyCount = [ i + 1 ];
+							var historyTtl = result.srInformationHistory[i].hstryTtl;
+							if (result.srInformationHistory[i].chgEndYmd === null) {
+								var historyChgEndYmd = "-";
+							} else {
+								var historyChgEndYmd = result.srInformationHistory[i].chgEndYmd;
+							}
+							if (result.srInformationHistory[i].hstryStts == 'I') {
+								var historyStts = "요청 중";
+							} else if (result.srInformationHistory[i].hstryStts == 'N') {
+								var historyStts = "반려";
+							} else {
+								var historyStts = "승인";
+							}
+
+							var param = '<tr data-toggle="modal" data-target="#approvalHistoryModal" onclick="getHstryDetail('
+									+ historyId + ')">';
+							param += '<th scope="row">' + historyCount
+									+ '</th>';
+							param += '<td>' + historyTtl + '</td>';
+							param += '<td>' + historyChgEndYmd + '</td>';
+							param += '<td>' + historyStts + '</td>';
+							param += '</tr>';
+
+							$("#history").append(param);
 						}
-
-						var param = '<tr data-toggle="modal" data-target="#approvalHistoryModal" onclick="getHstryDetail(' + historyId + ')">';
-							param += 	'<th scope="row">' + historyCount + '</th>';
-							param += 	'<td>' + historyTtl + '</td>';
-							param += 	'<td>' + historyChgEndYmd + '</td>';
-							param += 	'<td>' + historyStts + '</td>';
-							param +=  '</tr>';
-
-						$("#history").append(param);
 					}
-				}
-			});
-}
-
+				});
+	}
 <%-- 모달 실행 --%>
 	$(document).on('click', '#addbtn', function(e) {
 		console.log("click event");
@@ -189,9 +191,9 @@ th {
 																		<i class="ti-search"></i>
 																	</button>
 																</div>
-																<div class="col col-xl-1" style="padding-left:0px;">
-															<button class="btn btn-info">엑셀 다운로드</button>
-														</div>
+																<div class="col col-xl-1" style="padding-left: 0px;">
+																	<button class="btn btn-info">엑셀 다운로드</button>
+																</div>
 															</div>
 														</form>
 													</div>
@@ -202,7 +204,7 @@ th {
 											<div class="col-xl-8 col-md-12">
 												<div class="card">
 													<div class="card-header">
-														<h5>SR 요청 목록</h5>
+														<h5>관리자 !!SR 요청 목록</h5>
 														<div class="card-header-right">
 															<ul class="list-unstyled card-option">
 																<li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -221,126 +223,44 @@ th {
 																		style="font-size: 12;">
 																		<thead>
 																			<tr>
-																				<th style="width: 1px;">#</th>
-																				<th>SR번호</th>
-																				<th>시스템구분</th>
-																				<th>업무구분</th>
-																				<th style="width: 200px;">SR제목</th>
-																				<th>담당자</th>
-																				<th>완료요청일</th>
-																				<th>완료예정일</th>
+																				<th style="width: 1px;"></th>
+																				<th>요청 번호</th>
+																				<th>제목</th>
+																				<th>관련시스템</th>
+																				<th style="width: 200px;">등록자</th>
+																				<th>소속</th>
+																				<th>검토자</th>
 																				<th>진행상태</th>
+																				<th>등록일</th>
+																				<th>완료예정일</th>
 																			</tr>
+
 																		</thead>
 																		<tbody>
-																			<tr>
-																				<th scope="row">1</th>
-																				<td>Mark</td>
-																				<td>Otto</td>
-																				<td>@mdo</td>
-																				<td>@mdo</td>
-																				<td>Mark</td>
-																				<td>Otto</td>
-																				<td>@mdo</td>
-																				<td>@mdo</td>
-																			</tr>
-																			<tr>
-																				<th scope="row">2</th>
-																				<td>Jacob</td>
-																				<td>Thornton</td>
-																				<td>@fat</td>
-																				<td>Jacob</td>
-																				<td>Thornton</td>
-																				<td>@fat</td>
-																				<td>Jacob</td>
-																				<td>Thornton</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-
-																			</tr>
-																			<tr>
-																				<th scope="row">3</th>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																				<td>@twitter</td>
-																				<td>Larry</td>
-																				<td>the Bird</td>
-																			</tr>
+																			<c:forEach var="srDemand" items="${srDemandList}"
+																				varStatus="status">
+																				<tr
+																					onclick="getSrDemandDetail('${srDemand.dmndNo}')">
+																					<th scope="row">${status.count}</th>
+																					<td>${srDemand.dmndNo}</td>
+																					<td>${srDemand.ttl}</td>
+																					<td>${srDemand.sysNm}</td>
+																					<td>${srDemand.custNm}</td>
+																					<td>${srDemand.instNm}</td>
+																					<td>${srDemand.rvwrNm}</td>
+																					<td>${srDemand.sttsNm}</td>
+																					<td>${srDemand.dmndYmd}</td>
+																					<td>${srDemand.endYmd}</td>
+																				</tr>
+																			</c:forEach>
 																		</tbody>
 																	</table>
+																	<!-- 페이징 처리 -->
+																	<div class="d-flex justify-content-center">
+																		<%@ include
+																			file="/WEB-INF/views/fragments/pagination.jsp"%>
+																	</div>
+
 																</div>
 															</div>
 
@@ -353,7 +273,7 @@ th {
 											<div class="col-xl-4 col-md-12">
 												<div class="card">
 													<div class="card-header">
-														<h5>SR요청 처리정보</h5>
+														<h5>SR요청 상세</h5>
 														<div class="card-header-right">
 															<ul class="list-unstyled card-option">
 																<li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -370,8 +290,8 @@ th {
 																상세정보</a>
 															<div class="slide"></div></li>
 														<li class="nav-item"><a class="nav-link"
-															data-toggle="tab" href="#srHistory" role="tab">SR 개발
-																등록</a>
+															data-toggle="tab" href="#srHistory"
+															onclick="getHistoryList()" role="tab">SR 히스토리</a>
 															<div class="slide"></div></li>
 													</ul>
 
@@ -380,172 +300,134 @@ th {
 														<div class="tab-pane active" id="srDemandDetail"
 															role="tabpanel">
 															<div class="card-block">
-																<div class="card_body "
+																<div class="card_body" id="sddetail"
 																	style="font-size: 12px; padding-top: 20px;">
 																	<div class="form-group row">
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">SR번호</div>
+																			<div class="col col-sm-4 font-weight-bold">SR번호</div>
 																			<div class="col col-sm-6">
-																				<input type="text" class="form-control">
-																			</div>
-																		</div>
-																		<div class="col-sm-6">
-																			<div class="col col-sm-4">요청구분</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control">
+																				<div type="text" class="form-control dmndNo">${sd.dmndNo}</div>
 																			</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
-																		<div class="col col-sm-2">SR 제목</div>
+																		<div class="col col-sm-2 font-weight-bold">SR 제목</div>
 																		<div class="col col-sm-9">
-																			<input type="text" class="form-control">
+																			<div type="text" class="form-control ttl">${sd.ttl}</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
-																		<div class="col col-sm-2">관련 근거</div>
+																		<div class="col col-sm-2 font-weight-bold">관련 근거</div>
 																		<div class="col col-sm-9">
-																			<textarea rows="5" cols="5" class="form-control"></textarea>
+																			<div type="text" class="form-control relGrund">${sd.relGrund}</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">시스템구분</div>
-																			<div class="col col-sm-6">
-																				<div class="dropdown dropdown open">
-																					<form action="#">
-																						<select name="languages" id="lang">
-																							<option value="워크넷">워크넷</option>
-																							<option value="굴국밥">굴국밥</option>
-																							<option value="고소미">고소미</option>
-																						</select>
-																					</form>
-																				</div>
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">시스템구분</div>
+																			<div class="col col-sm-6 sysNm">${sd.sysNm}</div>
 																		</div>
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">업무구분</div>
-																			<div class="dropdown dropdown open">
-																				<form action="#">
-																					<select name="languages" id="lang">
-																						<option value="워크넷">내부망</option>
-																						<option value="굴국밥">외부망</option>
-																						<option value="고소미">구매</option>
-																					</select>
-																				</form>
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">업무구분</div>
+																			<div class="col col-sm-4 taskSeNm">${sd.taskSeNm}</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">요청기관</div>
-																			<div class="col col-sm-6">
-																				<div class="dropdown dropdown open">
-																					<form action="#">
-																						<select name="languages" id="lang">
-																							<option value="워크넷">고용부</option>
-																							<option value="굴국밥">오티아이</option>
-																							<option value="고소미">네이버</option>
-																						</select>
-																					</form>
-																				</div>
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">요청기관</div>
+																			<div class="col col-sm-6 instNm">${sd.instNm}</div>
 
 																		</div>
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">요청자</div>
-																			<div class="dropdown dropdown open">
-																				<form action="#">
-																					<select name="languages" id="lang">
-																						<option value="워크넷">워크넷 직원</option>
-																						<option value="굴국밥">공무원</option>
-																						<option value="고소미">직원</option>
-																					</select>
-																				</form>
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">요청자</div>
+																			<div class="dropdown dropdown open clientNm">${sd.clientNm}</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">요청일</div>
-																			<div class="col col-sm-8">
-																				<input type="date" id="requestDatepicker">
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">요청일</div>
+																			<div class="col col-sm-8 dmndYmd">${sd.dmndYmd}</div>
 																		</div>
 																		<div class="col-sm-6">
-																			<div class="col col-sm-4">완료요청일</div>
-																			<div class="col col-sm-8">
-																				<input type="date" id="endRequestDatepicker">
+																			<div class="col col-sm-4 font-weight-bold">완료요청일</div>
+																			<div class="col col-sm-8 cmptnDmndYmd">${sd.cmptnDmndYmd}</div>
+																		</div>
+																	</div>
+																	<div class="row mt-3">
+																		<div class="col-6">
+																			<div class="col col-sm-4 font-weight-bold">개발
+																				담당자</div>
+																			<div class="col col-sm-6">
+																				<div type="text" class="form-control picNm">${sd.picNm}</div>
+																			</div>
+																		</div>
+																		<div class="col-6">
+																			<div class="col col-sm-4 font-weight-bold">개발
+																				부서</div>
+																			<div class="col col-sm-6">
+																				<div type="text" class="form-control deptNm">${sd.deptNm}</div>
 																			</div>
 																		</div>
 																	</div>
 																	<div class="row mt-3">
 																		<div class="col-6">
-																			<div class="col col-sm-4">개발 담당자</div>
+																			<div class="col col-sm-4 font-weight-bold">진행
+																				상태</div>
 																			<div class="col col-sm-6">
-																				<input type="text" class="form-control" value="개발자1"
-																					disabled>
+																				<div type="text" class="form-control sttsNm">${sd.sttsNm}</div>
 																			</div>
 																		</div>
 																		<div class="col-6">
-																			<div class="col col-sm-4">개발 부서</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control" value="부서1"
-																					disabled>
-																			</div>
+																			<div class="col col-sm-4 font-weight-bold">완료(예정)일</div>
+																			<div class="col col-sm-6 endYmd">${sd.endYmd}</div>
 																		</div>
 																	</div>
 																	<div class="row mt-3">
 																		<div class="col-6">
-																			<div class="col col-sm-4">진행 상태</div>
+																			<div class="col col-sm-4 font-weight-bold">검토자
+																				이름</div>
 																			<div class="col col-sm-6">
-																				<input type="text" class="form-control" value="관리자1"
-																					disabled>
+																				<div type="text" class="form-control rvwrNm">${sd.rvwrNm}</div>
 																			</div>
 																		</div>
 																		<div class="col-6">
-																			<div class="col col-sm-4">완료(예정)일</div>
+																			<div class="col col-sm-4 font-weight-bold">우선순위</div>
 																			<div class="col col-sm-6">
-																				<input type="text" class="form-control"
-																					value="000-0000-0000" disabled>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="row mt-3">
-																		<div class="col-6">
-																			<div class="col col-sm-4">검토자 이름</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control" value="관리자1"
-																					disabled>
-																			</div>
-																		</div>
-																		<div class="col-6">
-																			<div class="col col-sm-4">부서 번호</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control"
-																					value="000-0000-0000" disabled>
+																				<select id="rnk">
+																					<option value="상" selected>상</option>
+																					<option value="중">중</option>
+																					<option value="하">하</option>
+																				</select>
 																			</div>
 																		</div>
 																	</div>
 
 																	<div class="row mt-3 ml-1">
-																		<label class="col-sm-3 col-form-label px-0"
+																		<label
+																			class="col-sm-3 col-form-label px-0 font-weight-bold"
 																			style="line-height: 120px">반려 사유</label>
 																		<div class="col-sm-9 pl-0 ">
-																			<textarea rows="5" cols="5" class="form-control"></textarea>
+																			<c:if test="${sd.sttsCd == 0}">
+																				<textarea rows="5" cols="5"
+																					class="form-control rjctRsn" id="srRjctRsn"></textarea>
+																			</c:if>
+																			<c:if test="${sd.sttsCd != 0}">
+																				<div class="form-control rjctRsn">${sd.rjctRsn}</div>
+																			</c:if>
 																		</div>
 																	</div>
 																	<div class="form-group row">
-																		<label class="col-sm-3 col-form-label px-0"
+																		<label
+																			class="col-sm-2 col-form-label font-weight-bold"
 																			style="line-height: 100px; font-size: 12px;">SR
 																			내용</label>
-																		<div class="col-sm-9 pl-0">
-																			<textarea rows="5" cols="5" class="form-control"
-																				style="height: 100px;"></textarea>
+																		<div class="col-sm-9">
+																			<div class="form-control cn" style="height: 100px;">${sd.cn}</div>
 																		</div>
 																	</div>
 																	<div class="form-group row">
-																		<label class="col-sm-3 col-form-label px-0"
+																		<label
+																			class="col-sm-3 col-form-label font-weight-bold"
 																			style="font-size: 12px;">첨부파일</label>
 																		<div class="col-sm-9">
 																			<input type="file" class="">
@@ -553,11 +435,117 @@ th {
 																	</div>
 																	<div class="row">
 																		<div class="col-6"></div>
+																		<c:if test="${sd.sttsCd == 0}">
+																			<div class="col-6" style="text-align: right">
+																				<div id="srAccept"
+																					class="btn btn-primary btn-round save center"
+																					onclick="goAccept('${sd.dmndNo}')">승인</div>
+
+																				<div id="srDecline"
+																					class="btn btn-primary btn-round danger cancle"
+																					onclick="goDecline('${sd.dmndNo}')">반려</div>
+																			</div>
+																		</c:if>
+																	</div>
+																</div>
+																<%------------- 요청 수정 ----------------------------------- --%>
+																<div class="card_body" id="sdupdate"
+																	style="font-size: 12px; padding-top: 20px; display: none;">
+																	<form action="/srdemand/modify" method="post"
+																		id="sdUpdateForm">
+																		<input type="hidden" name="dmndNo"
+																			value="${sd.dmndNo}">
+																		<div class="form-group row">
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">SR번호ss</div>
+																				<div class="col col-sm-6">
+																					<div type="text" class="dmndNo">${sd.dmndNo}</div>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col col-sm-2 font-weight-bold">SR
+																				제목</div>
+																			<div class="col col-sm-9">
+																				<input type="text" class="form-control ttl"
+																					name="ttl">
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col col-sm-2 font-weight-bold">관련
+																				근거</div>
+																			<div class="col col-sm-9">
+																				<input type="text" class="form-control relGrund"
+																					name="relGrund">
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">시스템구분</div>
+																				<div class="col col-sm-6 sysNm">${sd.sysNm}</div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">업무구분</div>
+																				<div class="col col-sm-4 taskSeNm">${sd.taskSeNm}</div>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">요청기관</div>
+																				<div class="col col-sm-6 instNm"></div>
+
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">요청자</div>
+																				<div class="dropdown dropdown open clientNm"></div>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">요청일</div>
+																				<div class="col col-sm-8 dmndYmd"></div>
+																			</div>
+																			<div class="col-sm-6">
+																				<div class="col col-sm-4 font-weight-bold">완료요청일</div>
+																				<div class="col col-sm-8 cmptnDmndYmd"></div>
+																			</div>
+																		</div>
+																		<div class="row mt-3">
+																			<div class="col-6">
+																				<div class="col col-sm-4 font-weight-bold">진행
+																					상태</div>
+																				<div class="col col-sm-6">
+																					<div class="form-control sttsNm" disabled></div>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<label
+																				class="col-sm-2 col-form-label font-weight-bold"
+																				style="line-height: 100px; font-size: 12px;">SR
+																				내용</label>
+																			<div class="col-sm-9">
+																				<textarea rows="5" cols="5" class="form-control cn"
+																					style="height: 100px;" name="cn"></textarea>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<label
+																				class="col-sm-3 col-form-label font-weight-bold"
+																				style="font-size: 12px;">첨부파일</label>
+																			<div class="col-sm-9">
+																				<input type="file" class="">
+																			</div>
+																		</div>
+																	</form>
+																	<div class="row">
+																		<div class="col-6"></div>
 																		<div class="col-6" style="text-align: right">
-																			<button class="btn btn-primary btn-round save center">승인</button>
+																			<button type="submit" class="modal_btn save center"
+																				form="sdUpdateForm">저장</button>
 
 																			<button
-																				class="btn btn-primary btn-round danger cancle">반려</button>
+																				class="btn btn-primary btn-round danger cancle">삭제</button>
 																		</div>
 																	</div>
 																</div>
@@ -565,50 +553,25 @@ th {
 														</div>
 														<%-- *********************************** [ SR 히스토리  ] ***********************************--%>
 														<div class="tab-pane" id="srHistory" role="tabpanel">
-															<div class="card-block" style="height: 600px;">
-																<div class="card_body "
-																	style="font-size: 12px; padding-top: 20px;">
-																	<div class="form-group row">
-																		<div class="col-sm-6">
-																			<div class="col col-sm-4">개발담당자</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control">
-																			</div>
-																		</div>
-																		<div class="col-sm-6">
-																			<div class="col col-sm-4">개발부서</div>
-																			<div class="col col-sm-6">
-																				<input type="text" class="form-control">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="form-group row">
-
-																		<div class="col-sm-6">
-																			<div class="col col-sm-4">완료(예정)일</div>
-																			<div class="col col-sm-6">
-																				<input type="text" id="endDatepicker">
-																			</div>
-																		</div>
-																		<div class="col-sm-6">
-																			<div class="col col-sm-4">계획 시작일</div>
-																			<div class="col col-sm-6">
-																				<input type="text" id="startDatepicker">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="form-group row">
-																		<div class="col col-sm-2">관련 근거</div>
-																		<div class="col col-sm-9">
-																			<textarea rows="5" cols="5" class="form-control"></textarea>
-																		</div>
-																	</div>
-																	<button class="btn btn-info btn-lg"
-																		style="width: 100%;">등록</button>
+															<div class="card-block table-border-style"
+																style="padding: 0px;">
+																<div class="table-responsive">
+																	<table class="table table-hover text-center"
+																		style="font-size: 12px; padding: 0px;">
+																		<thead>
+																			<tr>
+																				<th style="width: 1px;">순번</th>
+																				<th>제목</th>
+																				<th>변경될 완료일</th>
+																				<th>수락여부</th>
+																			</tr>
+																		</thead>
+																		<tbody id="history">
+																		</tbody>
+																	</table>
 																</div>
 															</div>
 														</div>
-
 													</div>
 												</div>
 											</div>
@@ -631,6 +594,8 @@ th {
 	<!-- 검색 -->
 	<script src="/resources/assets/js/srDemandList.js"></script>
 
+	<%-- 상세, 등록, 수정 --%>
+	<script src="/resources/js/srDemand.js"></script>
 	<!-- 모달 -->
 	<jsp:include page="/WEB-INF/views/history/approvalHistoryModal.jsp" />
 	<jsp:include page="/WEB-INF/views/srDemand/srDemandDetail.jsp" />

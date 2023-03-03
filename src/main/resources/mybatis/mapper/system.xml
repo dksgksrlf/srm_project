@@ -6,4 +6,18 @@
 			SYS_NM as sysNm
 		FROM SYSTEMS
 	</select>
+	
+	<!-- sysCd로 부서cd 가져오기 -->
+	<select id="getDeptCdBySysCd" parameterType="string" resultType="string">
+		SELECT DEPT_CD
+		FROM SYSTEMS
+		WHERE SYS_CD = #{sysCd}
+	</select>
+	
+	<!-- 첫 시스템 정보만 가져온다. -->
+	<select id="selectFirstSystem" resultType="system">
+		SELECT SYS_CD as sysCd, SYS_NM as sysNm
+		FROM SYSTEMS
+		OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY
+	</select>
 </mapper>

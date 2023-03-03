@@ -15,6 +15,9 @@ function getDetail(dmndNo, srNo) {
 			console.log(detail);
 			$("#SRDSrNo").val(srNo);
 			$("#SRDDmndNo").val(detail.dd.dmndNo);
+			// 우선순위 데이터 
+			$("#SiRnk").empty();
+			$("#SiRnk").text(detail.dd.rnk);
 			$("#SRDTitle").val(detail.dd.ttl);
 			$("#SRDRelgrund").val(detail.dd.relGrund);
 			$("#SRDSys").val(detail.dd.sysNm);

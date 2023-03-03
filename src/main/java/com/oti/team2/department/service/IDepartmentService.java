@@ -2,6 +2,8 @@ package com.oti.team2.department.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.oti.team2.department.dto.Department;
 
 import com.oti.team2.util.pager.Pager;
@@ -42,4 +44,10 @@ public interface IDepartmentService {
 	 * @return 부서 이름 목록
 	 * */
 	public List<Department> getDepartmentNameList();
+	
+	/**
+	 *  부서cd로 담당자 아이디 가져오기
+	 *  @author 신정은
+	 */
+	public String getMngrNameByDeptCd(@Param("deptCd") String deptCd);
 }

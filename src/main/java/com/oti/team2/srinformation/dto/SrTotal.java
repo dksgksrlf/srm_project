@@ -9,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor // 모든 생성자 만들어줌
 public class SrTotal {
 	private SrdemandDetail dd;
-	private SrplanInfomation pi;
+	private SrplanInformation pi;
 }

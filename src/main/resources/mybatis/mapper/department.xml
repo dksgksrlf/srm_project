@@ -58,5 +58,13 @@
 		FROM
 		DEPARTMENTS
 	</select>
+	
+	<!-- 부서cd로 부서 담당자 id 가져오기 -->
+	<select id="selectMngrNameByDeptCd" parameterType="string" resultType="string">
+		SELECT MNGR_ID
+		FROM departments
+		WHERE DEPT_CD=#{deptCd}
+	</select>
+	
 
 </mapper>
