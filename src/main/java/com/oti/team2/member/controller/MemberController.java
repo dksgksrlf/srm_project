@@ -160,6 +160,7 @@ public class MemberController {
 	 * @return 로그인 폼
 	 * 
 	 */
+	/*
 	@ResponseBody
 	@PostMapping("/findPswd")
 	public int getPswd(HttpServletRequest req, Model model, MemberDto memberDto,
@@ -223,8 +224,9 @@ public class MemberController {
 			return 1;
 		}
 	}
+	*/
 	
-/*	@ResponseBody
+	@ResponseBody
 	@PostMapping("/findPswd")
 	public int getPswd(HttpServletRequest req, Model model, MemberDto memberDto,
 			@RequestParam(required = true, value = "eml") String eml,
@@ -293,6 +295,7 @@ public class MemberController {
 					"  color: white;" + 
 					"}" + 
 					"a{color:#FFFFFF;}" + 
+					"h3{text-align: center;}"+
 					"a:hover{color:#F05F57;}" + 
 					"</style>" + 
 					"</head>";
@@ -307,7 +310,7 @@ public class MemberController {
 					"    <p>아래의 임시 비밀번호로 로그인 하신 뒤 비밀번호 변경을 진행해주세요.</p>";
 			content += "<div align='center' style='border:2px solid black; font-family:verdana';>" + 
 					"      <div style='font-size:200%; color:#D45254;'>" + 
-					"      	<strong >"+ randomPswd +"</strong>" + 
+					"      	<strong >"+ randomPswd +"<strong >" + 
 					"      </div>" + 
 					"	</div>" + 
 					"  <br/>";
@@ -315,10 +318,11 @@ public class MemberController {
 					"   <p>감사합니다.</p>" + 
 					"   <br/>" + 
 					"   <p>Contact Us : otiteam2@gmail.com</p>" + 
+					"<h3 style='color:white;'><a href=\"http://localhost:8080/loginForm\">로그인 하러 가기</a></h3>" +
 					"  </article>" + 
 					"</section>";
 			content += "<footer>" + 
-					"<p><a href=\"http://localhost:8080/loginForm\">로그인</a></p>" + 
+					"<strong ><p style='line-height: 20px'>Team2</p><strong >" +
 					"</footer>" + 
 					"</body>" + 
 					"</html>";
@@ -340,7 +344,7 @@ public class MemberController {
 			// 회원정보가 있다면
 			return 1;
 		}
-	}*/
+	}
 
 	/**
 	 * 

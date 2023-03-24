@@ -14,7 +14,7 @@ function showAdminGraph(dmndNo) {
 						text : '진척계획이 수립되지 않았습니다.'
 					},
 					xAxis : {
-						
+
 					},
 					yAxis : {
 						title : {
@@ -24,11 +24,11 @@ function showAdminGraph(dmndNo) {
 					series : [ {
 						type : 'line',
 						name : '계획'
-						
+
 					}, {
 						type : 'column',
 						name : '현재'
-						
+
 					} ]
 				});
 			} else {

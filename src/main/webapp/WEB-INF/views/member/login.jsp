@@ -139,7 +139,7 @@
                   (사원용)</button>
             </div>
          </div>
-         <div class="row">
+          <div class="row">
             <div class="col-md-6">
                <a href="/google/login">
 	                <img width="180px;"
@@ -147,7 +147,7 @@
 	                  alt="small-logo.png">
                   </a>
             </div>
-         </div>
+         </div> 
          <hr />
          <div class="row">
             <div class="col-md-10">
