@@ -249,7 +249,7 @@ public class MainController {
 		ttotal = srdemandService.getcountsByCustIdOrPicIdAndSttsCd(auth.getName(), null, 4, 1).getTotalRows();
 		comtotal = srdemandService.getcountsByCustIdOrPicIdAndSttsCd(auth.getName(), null, 5, 1).getTotalRows();
 		cantotal = srdemandService.getcountsByCustIdOrPicIdAndSttsCd(auth.getName(), null, 6, 1).getTotalRows();
-		
+
 		Map<Integer, Integer> map = new HashMap<>();
 		map.put(0, atotal);
 		map.put(1, rejTotal);
@@ -258,8 +258,18 @@ public class MainController {
 		map.put(4, ttotal);
 		map.put(5, comtotal);
 		map.put(6, cantotal);
-		
+
 		log.info(map);
 		return map;
+	}
+
+	/**
+	 * 403 접근 권한이 없다는 에러화면 제공
+	 * 
+	 * @author 신정은
+	 */
+	@GetMapping("/error/forbidden")
+	public String forbiddenErrorPage() {
+		return "error/forbidden";
 	}
 }
