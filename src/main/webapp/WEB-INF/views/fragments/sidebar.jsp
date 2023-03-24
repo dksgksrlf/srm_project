@@ -59,8 +59,15 @@
 						<div class="profile_wrapper row mr-0 pr-0">
 							<div class="gradation_animate"></div>
 							<div class="image_wrapper">
-								<img class="img-80 img-radius" style="width: 90px"
+								<sec:authentication property="principal.picture" var="picture" />
+								<c:if test="${picture eq null}">
+									<img class="img-80 img-radius" style="width: 90px"
 									src="${pageContext.request.contextPath}/member/profile/<sec:authentication property='principal.username'/>">
+								</c:if>
+								<c:if test="${picture ne null}">
+									<img class="img-80 img-radius" style="width: 90px"
+										src="<sec:authentication property='principal.picture'/>">
+								</c:if> 
 							</div>
 						</div>
 						<div class="user-details col-12 row"

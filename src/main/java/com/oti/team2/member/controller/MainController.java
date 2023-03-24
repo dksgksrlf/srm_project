@@ -82,6 +82,7 @@ public class MainController {
 			// 게시글
 			qPager = new Pager(6, boardService.getTotalRow("qna", memberId, null), 1);
 			qnaList = boardService.getBoardList("qna", memberId, qPager, null);
+			model.addAttribute("sttsCd", 2);
 
 		} else if (role.equals(Auth.ROLE_DEVELOPER.toString())) {
 			pager = srdemandService.getcountsByEmpIdAndSttsCd(auth.getName(), 3, 1);
@@ -99,6 +100,7 @@ public class MainController {
 			// 게시글
 			qPager = new Pager(6, boardService.getcountByEmpId(memberId, null), 1);
 			qnaList = boardService.getBoardListByEmpId(memberId, qPager, null);
+			model.addAttribute("sttsCd", 3);
 
 		} else {
 			pager = srdemandService.getcountsByCustIdOrPicIdAndSttsCd(null, auth.getName(), 0, 1);
@@ -116,6 +118,7 @@ public class MainController {
 			// 게시글
 			qPager = new Pager(6, boardService.getTotalRow("qna", null, null), 1);
 			qnaList = boardService.getBoardList("qna", null, qPager, null);
+			model.addAttribute("sttsCd", 0);
 
 		}
 		model.addAttribute("srList", srList);
@@ -135,7 +138,6 @@ public class MainController {
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("nPager", nPager);
 
-		model.addAttribute("sttsCd", 0);
 		log.info(srList);
 		log.info(pager);
 		return "member/my-todo";
@@ -259,15 +261,5 @@ public class MainController {
 		
 		log.info(map);
 		return map;
-	}
-
-
-	/**
-	 * 403 접근 권한이 없다는 에러화면 제공
-	 * @author 신정은
-	 */
-	@GetMapping("/error/forbidden")
-	public String forbiddenErrorPage() {
-		return"error/forbidden";
 	}
 }

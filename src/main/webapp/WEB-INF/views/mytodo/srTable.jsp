@@ -26,11 +26,11 @@ font-size: 15px !important;
 	<c:if test="${fn:length(srList) gt 0}">
 		<thead>
 			<tr>
-				<th width="15%" class="text-left">SR번호</th>
+				<th width="10%" class="text-left">SR번호</th>
 				<th width="15%" class="text-left">시스템구분</th>
 				<th width="15%" class="text-left">업무구분</th>
-				<th width="20%" class="text-left">제목</th>
-				<c:if test="${sttsCd ne 0}">
+				<th width="25%" class="text-left">제목</th>
+				<c:if test="${sttsCd gt 1}">
 					<th width="7%" class="text-center">담당자</th>
 				</c:if>
 				<th width="10%" class="text-center">완료요청일</th>
@@ -72,15 +72,15 @@ font-size: 15px !important;
 				<td id="sysNm" class="text-left">${sr.sysNm}</td>
 				<td id="taskNm" class="text-left">${sr.taskNm}</td>
 				<c:choose>
-					<c:when test="${fn:length(sr.ttl) > 21}">
+					<c:when test="${fn:length(sr.ttl) > 30}">
 						<td id="ttl" class="text-left"><c:out
-								value="${fn:substring(sr.ttl,0,20)}" />...</td>
+								value="${fn:substring(sr.ttl,0,29)}" />...</td>
 					</c:when>
 					<c:otherwise>
 						<td id="ttl" class="text-left"><c:out value="${sr.ttl}" /></td>
 					</c:otherwise>
 				</c:choose>
-				<c:if test="${sttsCd ne 0}">
+				<c:if test="${sttsCd gt 1}">
 					<td id="picNm" class="text-center">${sr.picNm}</td>
 				</c:if>
 				<td id="cmptnDmndYmd" class="text-center text-center">${sr.cmptnDmndYmd}</td>

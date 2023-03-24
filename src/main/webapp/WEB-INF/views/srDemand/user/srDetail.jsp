@@ -133,10 +133,10 @@
 		<c:if test="${sd.sttsCd == 0}">
 			<div class="col" style="text-align: right">
 				<div class="btn btn-sm btn-danger"
-					style="float: right; margin-right: 5px; font-weight: bold; font-size: 20px"
+					style="float: right; font-weight: bold; font-size: 20px; width:50%;"
 					onclick="deleteSr('${sd.dmndNo}')">삭제</div>
 				<button id="modbtn"
-					style="float: right; margin-right: 5px; font-weight: bold; font-size: 20px"
+					style="font-weight: bold; font-size: 20px; width:50%;"
 					class="btn btn-sm btn-info" onclick="updateSr('${sd.dmndNo}')">수정</button>
 			</div>
 		</c:if>

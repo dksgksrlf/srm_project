@@ -122,7 +122,6 @@ table thead tr {
 table tbody td {
 	font-size: 15px !important;
 }
-
 .fontWrapper {
 	width: 100%;
 	display: block; /* 블록태그로 만들어준다 */
@@ -233,10 +232,10 @@ table tbody td {
 								width="30px;">
 						</button>
 						<div class="card-header-right">
-							<ul class="list-unstyled card-option">
-								<li><i class="fa fa fa-wrench open-card-option"></i></li>
-								<li><i class="fa fa-window-maximize full-card"></i></li>
-								<li><i class="fa fa-refresh reload-card"></i></li>
+							<ul class="list-unstyled card-option" style="color:white;">
+								<li><i class="fa fa fa-wrench open-card-option" style="color:white;"></i></li>
+								<li><i class="fa fa-window-maximize full-card"style="color:white;"></i></li>
+								<li><i class="fa fa-refresh reload-card"style="color:white;"></i></li>
 							</ul>
 						</div>
 					</div>
@@ -280,9 +279,9 @@ table tbody td {
 														<th scope="row">${pager.startRowNo + status.index}</th>
 														<td><strong>${srDemand.dmndNo}</strong></td>
 														<c:choose>
-															<c:when test="${fn:length(srDemand.ttl) > 20}">
+															<c:when test="${fn:length(srDemand.ttl) > 17}">
 																<td id="ttl" class="text-left"><c:out
-																		value="${fn:substring(srDemand.ttl,0,19)}" />...</td>
+																		value="${fn:substring(srDemand.ttl,0,16)}" />...</td>
 															</c:when>
 															<c:otherwise>
 																<td id="ttl" class="text-left"><c:out
@@ -343,8 +342,7 @@ table tbody td {
 			<%-- *********************************** [SR요청 처리정보 ] ***********************************--%>
 			<div class="col-xl-4 col-md-12 p-0">
 				<div class="card">
-					<div class="card-header">
-						s
+					<div class="card-header">s
 						<h5 style="font-weight: bold; font-size: 20px">SR 요청 상세정보</h5>
 					</div>
 					<div class="tab-content tabs card-block"

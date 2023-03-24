@@ -262,7 +262,7 @@
 								access="isAuthenticated()">
 								<li class="waves-effect waves-light">
 									<button class="btn btn-sm btn-oti" onclick="logOut()"
-										style="margin-top: 14px; margin-left: 5px; padding: 6px; border-color: white; border-width: 2; background-color: #4C1342;"
+										style="margin-top: 14px; margin-left: 5px; font-size:15px; border-width: 2; background-color: #4C1342;"
 										type="button">로그아웃</button>
 								</li>
 							</sec:authorize></li>

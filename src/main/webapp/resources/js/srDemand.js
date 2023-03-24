@@ -218,7 +218,6 @@ function goAccept(dmndNo) {
       contentType : 'application/json; charset=UTF-8',
       dataType : "json",
       success : function(res) {
-         //alert(res.result);
     	 location.href="/admin/srdemand/list";
       },
       error : function(error) {
@@ -231,8 +230,6 @@ function goAccept(dmndNo) {
 function goDecline(dmndNo) {
    // 반려사유 작성하지 않을 경우 g화면 다시 이동시키기
    var rjctRsn = $('#srRjctRsnn').val();
-   console.log("~~~~~~~~~~~~~~~~~~!");
-   console.log($('#srRjctRsnn').val());
    if (!rjctRsn) {
      // alert('반려사유를 입력하여주세요.');
 	   adminAlert("반려사유를 입력하여주세요.")

@@ -174,8 +174,8 @@ table tbody td {
 								<h5 style="font-weight: bold; font-size: 20px">SR 요청 관리</h5>
 							</div>
 							<div class="col-1 mr-5">
-								<button class="btn btn-oti btn-sm" id="addbtn"
-									style="font-size: 20px; font-weight: bold;">요청 등록</button>
+								<button class="btn btn-info btn-sm" id="addbtn"
+									style="font-size: 20px; font-weight: bold;border-radius:20px;">요청 등록</button>
 							</div>
 						</div>
 					</div>
@@ -268,9 +268,9 @@ table tbody td {
 						</button>
 						<div class="card-header-right">
 							<ul class="list-unstyled card-option">
-								<li><i class="fa fa fa-wrench open-card-option"></i></li>
-								<li><i class="fa fa-window-maximize full-card"></i></li>
-								<li><i class="fa fa-refresh reload-card"></i></li>
+								<li><i class="fa fa fa-wrench open-card-option"style="color:white;"></i></li>
+								<li><i class="fa fa-window-maximize full-card"style="color:white;"></i></li>
+								<li><i class="fa fa-refresh reload-card"style="color:white;"></i></li>
 							</ul>
 						</div>
 					</div>
@@ -311,9 +311,9 @@ table tbody td {
 														<th scope="row">${pager.startRowNo + status.index}</th>
 														<td><strong>${srDemand.dmndNo}</strong></td>
 														<c:choose>
-															<c:when test="${fn:length(srDemand.ttl) > 20}">
+															<c:when test="${fn:length(srDemand.ttl) > 17}">
 																<td id="ttl" class="text-left" style="font-size: 14px;"><c:out
-																		value="${fn:substring(srDemand.ttl,0,19)}" />...</td>
+																		value="${fn:substring(srDemand.ttl,0,16)}" />...</td>
 															</c:when>
 															<c:otherwise>
 																<td id="ttl" class="text-left" style="font-size: 14px;"><c:out
@@ -328,7 +328,7 @@ table tbody td {
 															-</c:if> <c:if test="${(srDemand.sttsNm) ne '개발취소'}">
 																${srDemand.cmptnDmndYmd}
 															</c:if></td>
-														<td style="font-size: 14px;"><c:if
+															<td style="font-size: 14px;"><c:if
 																test="${(srDemand.sttsNm) eq '요청'}">
 																<label class="badge badge-warning"
 																	style="font-size: 15px;">${srDemand.sttsNm}</label>

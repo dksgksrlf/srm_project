@@ -49,7 +49,11 @@ public class MemberService implements IMemberService {
 	 */
 	@Override
 	public Member getMember(String memberId, String memberType) {
-		return memberDao.selectByMemberIdAndMemberType(memberId, memberType);
+		log.info(memberId);
+		log.info(memberType);
+		Member m = memberDao.selectByMemberIdAndMemberType(memberId, memberType);
+		log.info(m);
+		return m;
 	}
 
 	/**
@@ -145,5 +149,9 @@ public class MemberService implements IMemberService {
 	public int updateNewPswd(MemberDto memberDto) {
 		int rows = memberDao.updateRandomPswd(memberDto);
 		return rows;
+	}
+	
+	public Member isMember(String id) {
+		return memberDao.selectByMemberId(id);
 	}
 }

@@ -6,21 +6,44 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
+
+import com.oti.team2.member.dto.Join;
+import com.oti.team2.member.dto.Member;
+import com.oti.team2.member.dto.Users;
+import com.oti.team2.member.service.IJoinService;
+import com.oti.team2.member.service.IMemberService;
+import com.oti.team2.util.Auth;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Service
 public class GoogleService {
+	@Autowired
+	private IJoinService joinService;
+	
+	@Autowired
+	private IMemberService memberService;
+	
+	
 	public String getAuthURL() {
+		log.info(" google login 들옴");
 		String authURL = "https://accounts.google.com/o/oauth2/auth";
 		authURL += "?client_id=384557297665-3n8abq0eana7g9igakohgfsiu1q57qh3.apps.googleusercontent.com";
 		authURL += "&response_type=code";
 		authURL += "&redirect_uri=http://localhost:8080/login/oauth2/google/callback";
-		authURL += "&email profile";
+		authURL += "&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid";
 		return authURL;
 	}		
 	
@@ -80,8 +103,9 @@ public class GoogleService {
 		return access_token;
 	}
 
-	public Map<String, String> getUserInfo(String access_token) {
+	public Users getUserInfo(String access_token) {
 		Map<String, String> resultMap = new HashMap<>();
+		Users user = null;
 		
 		try {
 			String reqURL = "https://www.googleapis.com/oauth2/v2/userinfo";
@@ -116,19 +140,42 @@ public class GoogleService {
 				String id = root.getString("id");
 				String name = root.getString("name");
 				String email = root.getString("email");
+				String picture = root.getString("picture");
 				log.info("id: " + id);
 				log.info("name: " + name);
-				log.info("email: " + email);
+				log.info("email: " + email);	
 				
-				resultMap.put("id", id);
-				resultMap.put("name", name);
-				resultMap.put("email", email);	
+				Member member = memberService.isMember(email);
+				List<GrantedAuthority> roles = new ArrayList<>();
+				roles.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
+				// 비회원인 경우 회원가입 진행
+				if(member == null) {
+					log.info("비회원이므로 조인한다~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					Join join = new Join();
+					String randomPswd = UUID.randomUUID().toString().replaceAll("-", "");
+					randomPswd = randomPswd.substring(0, 10);
+					join.setMemberId(email);
+					join.setPswd(joinService.getEncodedPassword(randomPswd));
+					join.setFlnm(name);
+					join.setEml(email);
+					join.setMemberType(Auth.ROLE_CLIENT.toString());
+					log.info(join);
+					joinService.getJoin(join);
+					 user = new Users(email, join.getPswd(),true, roles,
+							 name, picture);
+				}
+				else {			      
+			        user = new Users(member.getMemberId(), member.getPswd(),true, roles,
+			        		member.getFlnm(), picture);
+				}
+				
+				
 			} else {
 				throw new Exception(resBody);
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resultMap;
+		return user;
 	}
 }

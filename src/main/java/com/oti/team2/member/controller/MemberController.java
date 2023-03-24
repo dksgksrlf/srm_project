@@ -66,7 +66,10 @@ public class MemberController {
 	@GetMapping("/myinfo")
 	public String getMember(HttpSession session, Model model, Authentication auth) {
 		// session 에서 사용자 정보 가져오기
+		log.info("-----------------------");
+		log.info(auth);
 		String role = auth.getAuthorities().stream().findFirst().get().toString();
+		log.info(role);
 		Member member = memberService.getMember(auth.getName(), role);
 		Institution inst = institutionService.getInst(auth.getName());
 		log.info(inst);

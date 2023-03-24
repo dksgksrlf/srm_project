@@ -28,7 +28,7 @@ function moveTab(sttsCd) {
  * @returns
  */
 function mytodoPaging(sttsCd,pageNo) {
-   var url = "/myportal/mytodo?sttsCd=" + sttsCode + "&page=" + pageNo;
+   var url = "/myportal/mytodo?sttsCd=" + sttsCd + "&page=" + pageNo;
    
    $.ajax({
       url : url,

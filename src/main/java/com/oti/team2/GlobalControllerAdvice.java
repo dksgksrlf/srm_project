@@ -10,7 +10,6 @@ import lombok.extern.log4j.Log4j2;
 
 @ControllerAdvice
 @Log4j2
-@RequestMapping("/")
 public class GlobalControllerAdvice {
 
 	/**
@@ -23,7 +22,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public String exceptionAll(Exception exception, Model model, Authentication auth) {
 		log.error(exception.toString());
-		exception.printStackTrace();
+		//exception.printStackTrace();
 
 		model.addAttribute("exception", exception);
 		if ((auth.getAuthorities().stream().findFirst().get().toString()).equals("ROLE_CLIENT")) {

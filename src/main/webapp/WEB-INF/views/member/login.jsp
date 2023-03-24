@@ -139,6 +139,15 @@
                   (사원용)</button>
             </div>
          </div>
+         <div class="row">
+            <div class="col-md-6">
+               <a href="/google/login">
+	                <img width="180px;"
+	                  src="${pageContext.request.contextPath}/resources/oti_images/google.png"
+	                  alt="small-logo.png">
+                  </a>
+            </div>
+         </div>
          <hr />
          <div class="row">
             <div class="col-md-10">

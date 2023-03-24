@@ -11,6 +11,11 @@
 	<security:http use-expressions="true">
 		<security:csrf disabled="true" />
 		<!-- URL 권한 설정 -->
+		<security:intercept-url pattern="/google/*"
+			access="permitAll" />
+			<security:intercept-url pattern="/login/oauth2/google/*"
+			access="permitAll" />
+			
 		<security:intercept-url pattern="/auth"
 			access="permitAll" />
 		<security:intercept-url pattern="/loginForm"

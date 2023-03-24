@@ -3,8 +3,10 @@ package com.oti.team2.member.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Join {
 	private String memberId;
 	private String pswd;

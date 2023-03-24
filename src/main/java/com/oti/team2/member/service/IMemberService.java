@@ -113,4 +113,6 @@ public interface IMemberService {
 	 * 
 	 */
 	public int updateNewPswd(MemberDto memberDto);
+	
+	public Member isMember(String id);
 }

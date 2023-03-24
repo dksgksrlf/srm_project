@@ -21,6 +21,9 @@ font-size: 15px !important;
 font-size: 15px !important;
    padding: 2	;
 	}
+label {
+	width:70px;
+}
 </style>
 <table id="todoHT" class="table table-hover"
 	style="table-layout: fixed;">

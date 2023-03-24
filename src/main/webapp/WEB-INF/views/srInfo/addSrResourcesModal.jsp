@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<style>
+#calendar thead, tbody {
+	background-color:white;
+} 
+</style>
 <div class="modal" id="addSrResourcesModal">
 
 	<div class="modal-body modal-dialog modal-lg" style="height: 800px">

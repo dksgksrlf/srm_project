@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
 		List<GrantedAuthority> authority = new ArrayList<>();
 		authority.add(new SimpleGrantedAuthority(member.getAuthority()));
 
-		Users user = new Users(member.getMemberId(), member.getPswd(), member.isEnabled(), authority, member.getFlnm());
+		Users user = new Users(member.getMemberId(), member.getPswd(), member.isEnabled(), authority, member.getFlnm(), null);
 		return user;
 	}
 }

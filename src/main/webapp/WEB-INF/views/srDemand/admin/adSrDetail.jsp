@@ -172,10 +172,10 @@
 		<c:if test="${sd.sttsCd eq 0}">
 			<div class="col" style="text-align: right">
 				<div id="srAccept"
-					style="float: right; margin-right: 5px; font-weight: bold; font-size: 20px"
+					style="font-weight: bold; font-size: 20px;width:50%;"
 					class="btn btn-sm btn-info" onclick="goAccept('${sd.dmndNo}')">승인</div>
 				<div id="srDecline"
-					style="float: right; margin-right: 5px; font-weight: bold; font-size: 20px"
+					style="float: right; font-weight: bold; font-size: 20px;width:50%;"
 					class="btn btn-sm btn-danger" onclick="goDecline('${sd.dmndNo}')">반려</div>
 			</div>
 		</c:if>

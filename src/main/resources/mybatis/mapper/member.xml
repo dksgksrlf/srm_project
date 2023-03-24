@@ -11,7 +11,7 @@
          FLNM as flnm ,
          MEMBER_TYPE as authority
       FROM MEMBERS
-      WHERE MEMBER_ID=#{memberId}         
+      <![CDATA[WHERE MEMBER_ID=#{memberId}]]>      
    </select>
    
    <!-- 고객/사원 총 행의 수 가져오기 -->
@@ -128,7 +128,7 @@
          FROM
             MEMBERS m
             <if test="memberType == 'ROLE_CLIENT'">
-                INNER JOIN INSTITUTION i on m.INST_CD = i.INST_CD 
+                LEFT OUTER JOIN INSTITUTION i on m.INST_CD = i.INST_CD 
              </if>
              <if test="memberType=='ROLE_DEVELOPER' || memberType=='ROLE_ADMIN'">
                , DEPARTMENTS d, JOB_GRADE j
