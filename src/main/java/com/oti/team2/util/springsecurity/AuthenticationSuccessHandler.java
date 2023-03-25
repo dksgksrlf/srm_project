@@ -34,7 +34,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 			throws IOException, ServletException {
 		log.info("로그인 성공");
 
-		alertService.connectSseEmitter(auth.getName());
+		alertService.getSseEmitter(auth.getName());
 		
 		super.onAuthenticationSuccess(req, res, auth);
 	}

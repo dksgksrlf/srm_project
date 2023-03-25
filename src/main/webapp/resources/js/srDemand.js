@@ -332,7 +332,7 @@ $(function() {
       $(".sortBtnAsc").attr("href","?sort=ASC");
       $(".sortBtnDesc").attr("href","?sort=DESC");
    }
-   console.log("정확한 기준을 모르겠어요");
+  
 });
 
 /* 요청 필터 바의 업무구분 가져오기 */
